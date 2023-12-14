@@ -51,7 +51,7 @@ class ProductService
             $data['facebook'] = $Facebook ? (int) $Facebook : null;
             $data['is_k_cup'] = $IsKCup ? ($IsKCup == Product::NO ? Product::IS_K_CUP_NO : Product::IS_K_CUP_YES) : null;
 
-            // If category does not exist in categories table then create category with that name.
+            // Create or find category in storage
             if ($CategoryName) {
                 $category = $this->categoriesRepository->findOrCreate($CategoryName);
                 $data['category_id'] = $category->id;
@@ -59,7 +59,7 @@ class ProductService
                 Log::info("Product entity id $entity_id doesn't have Category");
             }
 
-            // If brand does not exist in brands table then create brand with that name.
+            // Create or find new brand in storage
             if ($Brand) {
                 $brand = $this->brandsRepository->findOrCreate($Brand);
                 $data['brand_id'] = $brand->id;
