@@ -74,5 +74,6 @@ class ProductService
                 throw new Exception($ex->getMessage());
             }
         }
+        Log::info("Products ".count($results)." processed successfully");
     }
 }

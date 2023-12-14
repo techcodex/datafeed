@@ -1,66 +1,85 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Setting Up Project
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Installation
 
-## About Laravel
+- Clone project in your local machine by using command
+```bash
+git clone https://github.com/techcodex/datafeed
+```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- After Cloning the project into your local machine go to the project directory and open
+terminal into your project directory and run these Commands
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```bash 
+composer install
+```
+- Run this following command in your terminal for getting new .env configuration file
+```bash
+cp .env.example .env
+```
+- Run following artisan command to generate unique application key
+```bash
+php artisan key:generate
+```
+- Run this command 
+```bash
+composer dump-autoload
+```
+- Open `localhost/phpmyadmin` and create new Database with any name you want.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Setting Project Configurations
 
-## Learning Laravel
+Open your project in any **IDE** such as Visual Code, Php Storm, Netbeans. Open `.env`
+file and update your project configuration
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Change **APP_URL** value with the url you access your project with. If you are using **XAMPP**
+   then URL might be **http://localhost/project_name** , if you are using laragon then **APP_URL** will be **http://project_name.test**
+2. Replace **DB_DATABASE** constant value with the name of the database you created in phpmyadmin
+3. Replace **DB_USERNAME** constant with the name of your phpMyAdmin User Name e.g (root).
+4. If your Database is using any password then change **DB_PASSWORD** constant value with
+   your database password if your database is not using any password then leave it empty.
+7. Then Run this command in your terminal to push all migrations to database you created. 
+```bash
+php artisan migrate
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Starting up project
+1. Run this command in your terminal
+```bash
+php artisan process:data
+```
+2. This command will ask two arguments from you the first argument will be the data source from which you want to read the data from e.g (Data file, Api, Database) and the second argument will be the datafile path which you want to import if the datafile is data file then provide the path to the file and if the datasource is api then provide Api link
+3. This processData command will be responsible to process datafile which is located under `app\Console\Commands\ProcessData.php`
+4. The command will process the datafile and store the data into database
+5. The command will print Data processed successfully in the terminal upon successful insertion into database otherwise it will print error message in terminal
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Change Database Driver
+1. if you want to use database other then mysql then you can specify which database to use in .env file change 
+```ini
+DB_CONNECTION=mysql
+``` 
+to 
+```ini
+DB_CONNECTION=sqlite
+``` 
+these drivers are written in `config/database.php` file, if the desired database is not available then you can add your own database params.
 
-## Laravel Sponsors
+2. If you want to use a database driver which is not available under `config/database.php` connections array then you can add your connection there and connect with that database.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## How to add new datasource
+If you want to add new datasource suppose database is our new data source then you need to do following steps 
+1. Create a service called **DatabaseReaderService** under services directory 
+2. Create new interface under contracts called **DatabaseReader** this interface will have one method called **readDatabase** 
+3. DatabaseReaderService will implement two interfaces **Reader** and **DatabaseReader** the implementation how data will be readed from database will be written in **DatabaseReader** method and the **read** method will call this method and return the result to **DataParserService**
+4. Then in **ProcessData** you just need to write this in switch case **$this->dataParserService->handle(new DataReaderService, $tablename);**
+5. The **ApiReaderService** has been already created for proof of concept
 
-### Premium Partners
+## Testing
+You can find all the tests in `tests` directory. To test the application, run the following command,
+```bash
+php artisan test
+``` 
+By running this command you will see all the tests running in your CLI.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Logging
+You can find all the logs in `storage\logs\laravel.log`

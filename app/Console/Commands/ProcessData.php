@@ -58,9 +58,9 @@ class ProcessData extends Command
                 // case 2:
                 //     $results = $this->dataParserService->handle(new ApiReaderService(), $datapath);
                 //     break;
-                case 3:
+                // case 3:
                     // Add more configurations here for different data source.... eg. Database
-                    break;
+                    // break;
                 default:
                     $this->error("Invalid Data source");
             }
