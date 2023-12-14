@@ -25,7 +25,7 @@ class ProcessData extends Command
      *
      * @var string
      */
-    protected $description = 'This comamnd process data from store the data in database';
+    protected $description = 'This comamnd process data of different data source and store the data in database';
 
     public function __construct(private DataParserService $dataParserService,
     private ProductService $productService

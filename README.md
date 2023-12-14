@@ -91,6 +91,8 @@ $this->dataParserService->handle(new DataReaderService, $tablename);
 ```
 5. The **ApiReaderService** has been already created for proof of concept.
 
+The `ApiReaderService` **readApi** method returns array and I assume that the Api return json response this ApiReaderService is only for proof concept that how we can add new data sources into our application. 
+
 ## Testing
 You can find all the tests in `tests` directory. To test the application, run the following command,
 ```bash

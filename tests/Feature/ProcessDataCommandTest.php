@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Product;
 use App\Services\DataParserService;
 use App\Services\FileReaderService;
 use App\Services\ProductService;
@@ -105,11 +106,12 @@ class ProcessDataCommandTest extends TestCase
         $this->mock(DataParserService::class, function($mock) use ($mock_file_content) {
             $mock->shouldReceive('handle')->andReturn($mock_file_content);
         });
-
+        
         $this->artisan("process:data")
             ->expectsQuestion("Enter your Choice", 1)
             ->expectsQuestion("Enter source path", $filepath)
             ->expectsOutput('Data processed successfully!')
             ->assertExitCode(0);
+
     }
 }
