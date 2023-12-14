@@ -1,31 +1,31 @@
-# Setting Up Project
+# Data Feed Project
 
 ## Installation
 
-- Clone project in your local machine by using command
+Clone project in your local machine by using command
 ```bash
 git clone https://github.com/techcodex/datafeed
 ```
 
-- After Cloning the project into your local machine go to the project directory and open
+After Cloning the project into your local machine go to the project directory and open
 terminal into your project directory and run these Commands
 
 ```bash 
 composer install
 ```
-- Run this following command in your terminal for getting new .env configuration file
+Run this following command in your terminal for getting new .env configuration file
 ```bash
 cp .env.example .env
 ```
-- Run following artisan command to generate unique application key
+Run following artisan command to generate unique application key
 ```bash
 php artisan key:generate
 ```
-- Run this command 
+Run this command 
 ```bash
 composer dump-autoload
 ```
-- Open `localhost/phpmyadmin` and create new Database with any name you want.
+Open `localhost/phpmyadmin` and create new Database with any name you want.
 
 ## Setting Project Configurations
 
@@ -48,13 +48,13 @@ php artisan migrate
 ```bash
 php artisan process:data
 ```
-2. This command will ask two arguments from you the first argument will be the data source from which you want to read the data from e.g (Data file, Api, Database) and the second argument will be the datafile path which you want to import if the datafile is data file then provide the path to the file and if the datasource is api then provide Api link
-3. This processData command will be responsible to process datafile which is located under `app\Console\Commands\ProcessData.php`
+2. This command will ask two arguments from you, the first argument will be the **Data Source** from which you want to read the data from e.g (Data file, Api, Database, etc) and the second argument will be the datafile **path** which you want to import. If the data source is data file then provide the path to the file and if the datasource is api then provide Api link.
+3. This `processData.php` command will be responsible to process datafile which is located under `app\Console\Commands\ProcessData.php`
 4. The command will process the datafile and store the data into database
-5. The command will print Data processed successfully in the terminal upon successful insertion into database otherwise it will print error message in terminal
+5. The command will print **Data processed successfully** in the terminal upon successful insertion into database otherwise it will print error message in terminal and log file
 
 ## Change Database Driver
-1. if you want to use database other then mysql then you can specify which database to use in .env file change 
+1. if you want to use database other than mysql then you can specify which database to use in .env file change 
 ```ini
 DB_CONNECTION=mysql
 ``` 
@@ -62,17 +62,34 @@ to
 ```ini
 DB_CONNECTION=sqlite
 ``` 
-these drivers are written in `config/database.php` file, if the desired database is not available then you can add your own database params.
+and comment these three lines
 
-2. If you want to use a database driver which is not available under `config/database.php` connections array then you can add your connection there and connect with that database.
+```ini
+#DB_DATABASE=datafeed_db
+#DB_USERNAME=root
+#DB_PASSWORD=
+```
+Create database.sqlite in `database\database.sqlite` and then run these two commands in your terminal
 
-## How to add new datasource
-If you want to add new datasource suppose database is our new data source then you need to do following steps 
-1. Create a service called **DatabaseReaderService** under services directory 
-2. Create new interface under contracts called **DatabaseReader** this interface will have one method called **readDatabase** 
-3. DatabaseReaderService will implement two interfaces **Reader** and **DatabaseReader** the implementation how data will be readed from database will be written in **DatabaseReader** method and the **read** method will call this method and return the result to **DataParserService**
-4. Then in **ProcessData** you just need to write this in switch case **$this->dataParserService->handle(new DataReaderService, $tablename);**
-5. The **ApiReaderService** has been already created for proof of concept
+```bash
+php artisan config:clear
+php artisan migrate
+```
+
+these drivers are written in `config/database.php` file. By default Laravel support 5 databases, you can see the list [Here](https://laravel.com/docs/10.x/database#introduction)
+
+2. If you want to use a database driver which is not available under `config/database.php` connections array then you need to install related package for it.
+
+## How to add new Datasource
+Let's suppose database is our new data source then you need to do following steps 
+1. Create a service called `DatabaseReaderService.php` under `app/Services/` directory
+2. Create new interface in `app/Contracts` called `DatabaseReader.php` this interface will have one method called `readDatabase`
+3. `DatabaseReaderService.php` class will implement two interfaces `Reader.php` and `DatabaseReader.php` the implementation of how data will be read from database will be written in `DatabaseReader.php` method and the `read()` method will call this method and return the result to `DataParserService` class.
+4. In `ProcessData.php` file you just need to write this in switch case 
+```php
+$this->dataParserService->handle(new DataReaderService, $tablename);
+```
+5. The **ApiReaderService** has been already created for proof of concept.
 
 ## Testing
 You can find all the tests in `tests` directory. To test the application, run the following command,
@@ -81,5 +98,5 @@ php artisan test
 ``` 
 By running this command you will see all the tests running in your CLI.
 
-## Logging
+## Logs
 You can find all the logs in `storage\logs\laravel.log`

@@ -63,12 +63,14 @@ class ProcessData extends Command
                     // break;
                 default:
                     $this->error("Invalid Data source");
+                    Log::error("Invalid Data source ".$datasource);
             }
             
             // Store result in storage
             $this->info("Processing data");
             $this->productService->processProductData($results);
             $this->info("Data processed successfully!");
+            Log::info("Data job completed successfully");
 
         } catch (Exception $ex) {
             Log::error($ex->getMessage().' '.$ex->getLine().' '.$ex->getFile());
