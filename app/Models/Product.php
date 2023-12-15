@@ -19,9 +19,6 @@ class Product extends Model
 
     const IS_INSTOCK_YES = 1;
     const IS_INSTOCK_NO = 0;
-
-    const IS_FACEBOOK_YES = 1;
-    const IS_FACEBOOK_NO = 0;
     
     const IS_K_CUP_YES = 1;
     const IS_K_CUP_NO = 0;

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('link')->nullable();
             $table->text('image')->nullable();
             $table->double('rating')->nullable();
-            $table->string('caffine_type')->nullable();
+            $table->string('caffeine_type')->nullable();
             $table->integer('count')->default(0);
             $table->tinyInteger('flavored')->nullable();
             $table->tinyInteger('seasonal')->nullable();

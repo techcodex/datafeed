@@ -14,6 +14,8 @@ class ProductsRepository
      */
     public function store(array $data) : Product
     {
-        return Product::create($data);
+        return Product::updateOrCreate([
+                'entity_id' => $data['entity_id']
+            ],$data);
     }
 }

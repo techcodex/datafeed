@@ -29,7 +29,7 @@ class ProductFactory extends Factory
             'link' => fake()->url,
             'image' => fake()->imageUrl(),
             'rating' => fake()->numberBetween(1, 5), // Assuming rating is an integer between 1 and 5
-            'caffine_type' => fake()->word,
+            'caffeine_type' => fake()->word,
             'count' => fake()->randomNumber(),
             'flavored' => fake()->randomElement([Product::IS_FLAVOURED_NO, Product::IS_FLAVOURED_YES]),
             'seasonal' => fake()->randomElement([Product::IS_SEASONAL_NO, Product::IS_SEASONAL_YES]),

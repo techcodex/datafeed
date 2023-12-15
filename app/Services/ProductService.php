@@ -27,10 +27,11 @@ class ProductService
     /**
      * @param array $results
      * 
-     * @return void
+     * @return int
      */
-    public function processProductData(array $results) : void
+    public function processProductData(array $results) : int
     {
+        $new_records_count = 0;
         foreach ($results as $result) {
             extract($result);
             $data = [];
@@ -43,11 +44,11 @@ class ProductService
             $data['link'] = $link ? $link : '';
             $data['image'] = $image ? $image : '';
             $data['rating'] = $Rating ? $Rating : null;
-            $data['caffine_type'] = $CaffeineType ? $CaffeineType : '';
+            $data['caffeine_type'] = $CaffeineType ? $CaffeineType : '';
             $data['count'] = $Count ? $Count : 0;
-            $data['flavored'] = $Flavored ? ($Flavored == Product::NO ? Product::IS_FLAVOURED_NO : Product::IS_FACEBOOK_YES) : null;
-            $data['seasonal'] = $Seasonal ? ($Seasonal == Product::NO ? Product::IS_SEASONAL_NO : Product::IS_SEASONAL_YES) : null;
-            $data['instock'] = $Instock ? ($Instock == Product::NO ? Product::IS_INSTOCK_NO : Product::IS_INSTOCK_YES) : null;
+            $data['flavored'] = $Flavored ? ($Flavored == 'Yes' ? Product::IS_FLAVOURED_YES : Product::IS_FLAVOURED_NO) : null;
+            $data['seasonal'] = $Seasonal ? ($Seasonal == 'No' ? Product::IS_SEASONAL_NO : Product::IS_SEASONAL_YES) : null;
+            $data['instock'] = $Instock ? ($Instock == 'Yes' ? Product::IS_INSTOCK_YES : Product::IS_INSTOCK_NO) : null;
             $data['facebook'] = $Facebook ? (int) $Facebook : null;
             $data['is_k_cup'] = $IsKCup ? ($IsKCup == Product::NO ? Product::IS_K_CUP_NO : Product::IS_K_CUP_YES) : null;
 
@@ -67,13 +68,18 @@ class ProductService
                 Log::info("Product entity id $entity_id doesn't have Brand");
             }
 
-            // Store product record in storage
+            // update of store product record in storage
             try {
-                $this->productsRepository->store($data);
+                $product = $this->productsRepository->store($data);
+                if ($product->wasRecentlyCreated) {
+                    $new_records_count += 1;
+                }
             } catch (Exception $ex) {
                 throw new Exception($ex->getMessage());
             }
         }
         Log::info("Products ".count($results)." processed successfully");
+        Log::info("Number of products stored: ".$new_records_count);
+        return $new_records_count;
     }
 }
