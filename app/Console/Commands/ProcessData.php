@@ -69,8 +69,8 @@ class ProcessData extends Command
             // Store result in storage
             $this->info("Processing data");
             $newly_created_records = $this->productService->processProductData($results);
-            $this->info("Data processed successfully!");
             $this->info("Number of records stored: ".$newly_created_records);
+            $this->info("Data processed successfully!");
             Log::info("Data job completed successfully");
 
         } catch (Exception $ex) {
